@@ -1,9 +1,15 @@
+//Skynex
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
+
+//Roteamento do Next
 import { useRouter } from 'next/router';
+
+//Import das cores padrão
 import appConfig from './config.json';
 
 function Titulo(props) {
+    //Tag. Pega o que vem da Props, caso contrário, usa h1
     const Tag = props.tag || 'h1';
     return (
         <>
@@ -34,9 +40,13 @@ function Titulo(props) {
 //export default HomePage
 
 export default function PaginaInicial() {
-    //const username = 'rena-cruz';
+    //Pega a imagem e o nickname do GitHub. É estado!
     const [username, setUsername] = React.useState('rena-cruz');
-    const roteamento = useRouter();
+
+    //Roteamento
+    const roteamento = useRouter(); 
+
+    const imageError = 'https://cdn-icons.flaticon.com/png/512/4675/premium/4675250.png?token=exp=1643143907~hmac=d33376e971a68bd0b85abe5c7fae6906';
 
     return (
         <>
@@ -77,7 +87,7 @@ export default function PaginaInicial() {
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
                         }}
                     >
-                        <Titulo tag="h2">Bem-vindo de volta!</Titulo>
+                        <Titulo tag="h2">Bem-vindo!</Titulo>
                         <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
                             {appConfig.name}
                         </Text>
@@ -94,8 +104,8 @@ export default function PaginaInicial() {
                                 setUsername(valor);
                             }}
                         />*/}
-                        
 
+                      
                         <TextField
                             value={username}
                             onChange={function (event){
@@ -152,8 +162,13 @@ export default function PaginaInicial() {
                                 borderRadius: '50%',
                                 marginBottom: '16px',
                             }}
-                            src={`https://github.com/${username}.png`}
+                            src={
+                                username.length > 2
+                                    ? `https://github.com/${username}.png`
+                                    : imageError
+                            }
                         />
+
                         <Text
                             variant="body4"
                             styleSheet={{
