@@ -46,7 +46,7 @@ export default function PaginaInicial() {
     //Roteamento
     const roteamento = useRouter(); 
 
-    const imageError = 'https://cdn-icons.flaticon.com/png/512/4675/premium/4675250.png?token=exp=1643143907~hmac=d33376e971a68bd0b85abe5c7fae6906';
+    const imageError = 'https://images.vexels.com/media/users/3/147102/isolated/lists/082213cb0f9eabb7e6715f59ef7d322a-icone-de-perfil-do-instagram.png'
 
     return (
         <>
@@ -76,8 +76,8 @@ export default function PaginaInicial() {
                     {/* Formulário */}
                     <Box
                         as="form"
-                        onSubmit={function (infosDoEvento) {
-                            infosDoEvento.preventDefault();
+                        onSubmit={function (event) {
+                            event.preventDefault();
                             console.log('Alguém submeteu o form');
                             roteamento.push('/chat');
                             //window.location.href = '/chat';
@@ -161,6 +161,7 @@ export default function PaginaInicial() {
                             styleSheet={{
                                 borderRadius: '50%',
                                 marginBottom: '16px',
+                                height: 'auto'
                             }}
                             src={
                                 username.length > 2
