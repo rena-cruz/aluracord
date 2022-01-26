@@ -201,7 +201,7 @@ function MessageList(props) {
                                 styleSheet={{
                                     fontSize: '10px',
                                     marginLeft: '8px',
-                                    color: appConfig.theme.colors.neutrals[300],
+                                    color: appConfig.theme.colors.neutrals[200],
                                 }}
                                 tag="span"
                             >
@@ -213,8 +213,7 @@ function MessageList(props) {
                                     fontSize: '10px',
                                     fontWeight: 'bold',
                                     marginLeft: 'auto',
-                                    color: '#FFF',
-                                    backgroundColor: 'rgba(0,0,0,.5)',
+                                    color: appConfig.theme.colors.neutrals[200],
                                     width: '20px',
                                     height: '20px',
                                     borderRadius: '100%',
