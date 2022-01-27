@@ -1,23 +1,47 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import appConfig from './config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+
 
 export default function ChatPage() {
-    const [message, setMessage] = useState('')
-    const [messageList, setMessageList] = useState([])
+    const [message, setMessage] = React.useState('');
+    const [messageList, setMessageList] = React.useState([]);
+
+    React.useEffect(() => {
+        supabaseClient
+            .from('message')
+            // '*' seleciona tudo
+            .select('*')
+            .order('id', { ascending: false })
+            .then(({ data }) => {
+                console.log('Dados da consulta:', data);
+                setMessageList(data);
+            });
+    }, []);
 
     function handleNewMessage(newMessage) {
         const message = {
-            id: messageList.length + (Math.random() * 100),
-            text: newMessage,
-            user: 'rena-cruz',
-        }
+            //id: messageList.length + (Math.random() * 100),
+            de: 'rena-cruz',
+            texto: newMessage,
+        };
 
-        setMessageList([
-            message,
-            ...messageList,
-        ])
-        setMessage('')
+        supabaseClient
+            .from('message')
+            .insert([
+                message
+            ])
+            .then(({ data }) => {
+                console.log('Criando mensagem: ', data);
+                setMessageList([
+                    data[0],
+                    ...messageList,
+                ]);
+            });
+        setMessage('');
     }
 
     function handleDeleteMessage(event) {
@@ -114,7 +138,7 @@ export default function ChatPage() {
                             fullWidth
                             styleSheet={{
                                 maxWidth: '150px',
-                                
+
                             }}
                             buttonColors={{
                                 contrastColor: appConfig.theme.colors.neutrals["000"],
@@ -192,10 +216,10 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/${messageItem.user}.png`}
+                                src={`https://github.com/${messageItem.de}.png`}
                             />
                             <Text tag="strong">
-                                {messageItem.user}
+                                {messageItem.de}
                             </Text>
                             <Text
                                 styleSheet={{
@@ -228,7 +252,7 @@ function MessageList(props) {
                                 X
                             </Text>
                         </Box>
-                        {messageItem.text}
+                        {messageItem.texto}
                     </Text>
                 );
             })}
