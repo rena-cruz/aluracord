@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Text, Image } from '@skynexui/components';
-import appConfig from './../../pages/config.json';
+import myColors from './../helpers/colors.json';
+import myStickers from './../helpers/stickers.json';
 
 export function ButtonSendSticker(props) {
   const [isOpen, setOpenState] = React.useState('');
@@ -26,10 +27,10 @@ export function ButtonSendSticker(props) {
           marginRight: '10px'
         }}
         buttonColors={{
-          contrastColor: appConfig.theme.colors.neutrals["000"],
-          mainColor: appConfig.theme.colors.primary[500],
-          mainColorLight: appConfig.theme.colors.primary[400],
-          mainColorStrong: appConfig.theme.colors.primary[600],
+          contrastColor: myColors.theme.colors.neutrals["000"],
+          mainColor: myColors.theme.colors.primary[500],
+          mainColorLight: myColors.theme.colors.primary[400],
+          mainColorStrong: myColors.theme.colors.primary[600],
       }}
         label="😋"
         onClick={() => setOpenState(!isOpen)}
@@ -41,7 +42,7 @@ export function ButtonSendSticker(props) {
             flexDirection: 'column',
             borderRadius: '5px',
             position: 'absolute',
-            backgroundColor: appConfig.theme.colors.neutrals[800],
+            backgroundColor: myColors.theme.colors.neutrals[800],
             width: {
               xs: '200px',
               sm: '290px',
@@ -56,7 +57,7 @@ export function ButtonSendSticker(props) {
         >
           <Text
             styleSheet={{
-              color: appConfig.theme.colors.neutrals["000"],
+              color: myColors.theme.colors.neutrals["000"],
               fontWeight: 'bold',
             }}
           >
@@ -73,7 +74,7 @@ export function ButtonSendSticker(props) {
               overflow: 'scroll',
             }}
           >
-            {appConfig.stickers.map((sticker) => (
+            {myStickers.stickers.map((sticker) => (
               <Text
                 onClick={() => {
                   if (Boolean(props.onStickerClick)) {
@@ -86,10 +87,10 @@ export function ButtonSendSticker(props) {
                   borderRadius: '5px',
                   padding: '10px',
                   focus: {
-                    backgroundColor: appConfig.theme.colors.neutrals[600],
+                    backgroundColor: myColors.theme.colors.neutrals[600],
                   },
                   hover: {
-                    backgroundColor: appConfig.theme.colors.neutrals[600],
+                    backgroundColor: myColors.theme.colors.neutrals[600],
                   }
                 }}
               >

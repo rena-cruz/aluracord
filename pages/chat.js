@@ -1,20 +1,11 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useState } from 'react';
-import appConfig from './config.json';
-import { createClient } from '@supabase/supabase-js';
+import myColors from './../src/helpers/colors.json';
 import { useRouter } from 'next/router';
 import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
+import { MyService } from '../src/service/MyService';
 
-const supabaseClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-
-function escutaMensagensEmTempoReal(adicionaMensagem) {
-    return supabaseClient
-        .from('message')
-        .on('INSERT', (respostaLive) => {
-            adicionaMensagem(respostaLive.new);
-        })
-        .subscribe();
-}
+const supabaseClient = MyService.createClientDataBase();
 
 export default function ChatPage() {
     const roteamento = useRouter();
@@ -25,15 +16,12 @@ export default function ChatPage() {
     React.useEffect(() => {
         supabaseClient
             .from('message')
-            // '*' seleciona tudo
             .select('*')
             .order('id', { ascending: false })
             .then(({ data }) => {
                 setMessageList(data);
             });
-        const subscription = escutaMensagensEmTempoReal((newMessage) => {
-            console.log('Nova mensagem:', newMessage);
-            console.log('messageList:', messageList);
+        const subscription = MyService.listenMessageRealTime(supabaseClient, (newMessage) => {
             setMessageList((valorAtualDaLista) => {
                 console.log('valorAtualDaLista:', valorAtualDaLista);
                 return [
@@ -83,10 +71,10 @@ export default function ChatPage() {
         <Box
             styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: appConfig.theme.colors.primary[500],
+                backgroundColor: myColors.theme.colors.primary[500],
                 backgroundImage: `url(https://wallpapercave.com/wp/wp5723757.jpg)`,
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
-                color: appConfig.theme.colors.neutrals['000']
+                color: myColors.theme.colors.neutrals['000']
             }}
         >
             <Box
@@ -96,7 +84,7 @@ export default function ChatPage() {
                     flex: 1,
                     boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
                     borderRadius: '5px',
-                    backgroundColor: appConfig.theme.colors.neutrals[900],
+                    backgroundColor: myColors.theme.colors.neutrals[900],
                     height: '80%',
                     maxWidth: '85%',
                     maxHeight: '95vh',
@@ -110,7 +98,7 @@ export default function ChatPage() {
                         display: 'flex',
                         flex: 1,
                         height: '60%',
-                        backgroundColor: appConfig.theme.colors.neutrals[800],
+                        backgroundColor: myColors.theme.colors.neutrals[800],
                         flexDirection: 'column',
                         borderRadius: '5px',
                         padding: '16px',
@@ -145,9 +133,9 @@ export default function ChatPage() {
                                 resize: 'none',
                                 borderRadius: '5px',
                                 padding: '6px 8px',
-                                backgroundColor: appConfig.theme.colors.neutrals[300],
+                                backgroundColor: myColors.theme.colors.neutrals[300],
                                 marginRight: '12px',
-                                color: appConfig.theme.colors.neutrals[200],
+                                color: myColors.theme.colors.neutrals[200],
                             }}
 
                         />
@@ -172,10 +160,10 @@ export default function ChatPage() {
 
                             }}
                             buttonColors={{
-                                contrastColor: appConfig.theme.colors.neutrals["000"],
-                                mainColor: appConfig.theme.colors.primary[500],
-                                mainColorLight: appConfig.theme.colors.primary[400],
-                                mainColorStrong: appConfig.theme.colors.primary[600],
+                                contrastColor: myColors.theme.colors.neutrals["000"],
+                                mainColor: myColors.theme.colors.primary[500],
+                                mainColorLight: myColors.theme.colors.primary[400],
+                                mainColorStrong: myColors.theme.colors.primary[600],
                             }}
                         />
                     </Box>
@@ -213,7 +201,7 @@ function MessageList(props) {
                 display: 'flex',
                 flexDirection: 'column-reverse',
                 flex: 1,
-                color: appConfig.theme.colors.neutrals["000"],
+                color: myColors.theme.colors.neutrals["000"],
                 marginBottom: '16px',
             }}
         >
@@ -228,7 +216,7 @@ function MessageList(props) {
                             padding: '6px',
                             marginBottom: '12px',
                             hover: {
-                                backgroundColor: appConfig.theme.colors.neutrals[700],
+                                backgroundColor: myColors.theme.colors.neutrals[700],
                             }
                         }}
                     >
@@ -259,7 +247,7 @@ function MessageList(props) {
                                     styleSheet={{
                                         fontSize: '10px',
                                         //marginLeft: '8px',
-                                        color: appConfig.theme.colors.neutrals[200],
+                                        color: myColors.theme.colors.neutrals[200],
                                     }}
                                     tag="span"
                                 >
@@ -272,7 +260,7 @@ function MessageList(props) {
                                     fontSize: '10px',
                                     fontWeight: 'bold',
                                     marginLeft: 'auto',
-                                    color: appConfig.theme.colors.neutrals[200],
+                                    color: myColors.theme.colors.neutrals[200],
                                     width: '20px',
                                     height: '20px',
                                     borderRadius: '100%',

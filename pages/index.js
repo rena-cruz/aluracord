@@ -1,162 +1,28 @@
-//Skynex
-import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import React from 'react';
-
-//Roteamento do Next
 import { useRouter } from 'next/router';
-
-//Import das cores padrão
-import appConfig from './config.json';
-
-
-
-function Titulo(props) {
-    //Tag. Pega o que vem da Props, caso contrário, usa h1
-    const Tag = props.tag || 'h1';
-    return (
-        <>
-            <Tag>{props.children}</Tag>
-            <style jsx>{`
-              ${Tag} {
-                  color: ${appConfig.theme.colors.neutrals['000']};
-                  font-size: 24px;
-                  font-weight: 600;
-              }
-              `}</style>
-        </>
-    );
-}
+import {
+    MyBackground, MyButton, MyCardLogin, MyCardPhoto,
+    MyForm, MyImage, MyInput, MyText,
+    MyTitle
+} from './../src/library/RCruz';
 
 export default function PaginaInicial() {
-    //Pega a imagem e o nickname do GitHub. É estado!
+    const router = useRouter();
     const [username, setUsername] = React.useState('');
 
-    //Roteamento
-    const roteamento = useRouter();
-
-    const imageError = 'https://images.vexels.com/media/users/3/147102/isolated/lists/082213cb0f9eabb7e6715f59ef7d322a-icone-de-perfil-do-instagram.png'
-
     return (
-        <>
-            <Box
-                styleSheet={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    //backgroundColor: appConfig.theme.colors.primary[500],
-                    backgroundImage: 'url(https://wallpapercave.com/wp/wp5723757.jpg)',
-                    backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
-                }}
-            >
-                <Box
-                    styleSheet={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexDirection: {
-                            xs: 'column',
-                            sm: 'row',
-                        },
-                        width: '100%', maxWidth: '700px',
-                        borderRadius: '5px', padding: '32px', margin: '16px',
-                        boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-                        backgroundColor: appConfig.theme.colors.neutrals[500],
-                    }}
-                >
-                    <Box
-                        as="form"
-                        onSubmit={function (event) {
-                            event.preventDefault();
-                            if (username.trim() != '') {
-                                roteamento.push(`/chat?username=${username}`);
-                            }
-                        }}
-                        styleSheet={{
-                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                            width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
-                        }}
-                    >
-                        <Titulo tag="h2">Bem-vindo (a)!</Titulo>
-                        <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
-                            {appConfig.name}
-                        </Text>
-
-                        <TextField
-                            value={username}
-                            placeholder="Entre com o seu usuário do GitHub"
-                            onChange={function (event) {
-                                const valor = event.target.value;
-                                setUsername(valor);
-                            }}
-                            fullWidth
-                            textFieldColors={
-                                {
-                                    neutral: {
-                                        textColor: appConfig.theme.colors.neutrals[200],
-                                        mainColor: appConfig.theme.colors.neutrals[900],
-                                        mainColorHighlight: appConfig.theme.colors.primary[500],
-                                        backgroundColor: appConfig.theme.colors.neutrals[800],
-                                    },
-                                }
-                            }
-                            styleSheet={{
-                                
-                            }}
-                        />
-                        <Button
-                            type='submit'
-                            label='Entrar'
-                            fullWidth
-                            buttonColors={{
-                                contrastColor: appConfig.theme.colors.neutrals["000"],
-                                mainColor: appConfig.theme.colors.primary[500],
-                                mainColorLight: appConfig.theme.colors.primary[400],
-                                mainColorStrong: appConfig.theme.colors.primary[600],
-                            }}
-                        />
-                    </Box>
-
-                    <Box
-                        styleSheet={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            maxWidth: '200px',
-                            padding: '16px',
-                            backgroundColor: appConfig.theme.colors.neutrals[800],
-                            border: '1px solid',
-                            borderColor: appConfig.theme.colors.neutrals[999],
-                            borderRadius: '10px',
-                            flex: 1,
-                            minHeight: '240px',
-                        }}
-                    >
-                        <Image
-                            styleSheet={{
-                                borderRadius: '50%',
-                                marginBottom: '16px',
-                                height: 'auto'
-                            }}
-                            src={
-                                username.length > 2
-                                    ? `https://github.com/${username}.png`
-                                    : imageError
-                            }
-                        />
-
-                        <Text
-                            variant="body4"
-                            styleSheet={{
-                                color: appConfig.theme.colors.neutrals[200],
-                                backgroundColor: appConfig.theme.colors.neutrals[900],
-                                padding: '3px 10px',
-                                borderRadius: '1000px'
-                            }}
-                        >
-                            {username}
-                        </Text>
-                    </Box>
-                    {/* Photo Area */}
-                </Box>
-            </Box>
-        </>
+        <MyBackground>
+            <MyCardLogin>
+                <MyForm username={username} router={router}>
+                    <MyTitle tag="h2">Bem-vindo (a)!</MyTitle>
+                    <MyInput username={username} setUsername={setUsername} />
+                    <MyButton />
+                </MyForm>
+                <MyCardPhoto>
+                    <MyImage username={username} />
+                    <MyText> {username} </MyText>
+                </MyCardPhoto>
+            </MyCardLogin>
+        </MyBackground>
     );
 }
