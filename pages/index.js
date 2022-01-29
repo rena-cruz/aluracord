@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 //Import das cores padrão
 import appConfig from './config.json';
 
+
+
 function Titulo(props) {
     //Tag. Pega o que vem da Props, caso contrário, usa h1
     const Tag = props.tag || 'h1';
@@ -25,26 +27,12 @@ function Titulo(props) {
     );
 }
 
-// Componente React
-//function HomePage() {
-// JSX
-//    return (
-//        <div>
-//            <GlobalStyle />
-//            <Titulo Tag="h2">Bem-vindo de volta!</Titulo>
-//            <h2>Discord - Alura Matrix</h2>
-//        </div>
-//    )
-//}
-
-//export default HomePage
-
 export default function PaginaInicial() {
     //Pega a imagem e o nickname do GitHub. É estado!
-    const [username, setUsername] = React.useState('rena-cruz');
+    const [username, setUsername] = React.useState('');
 
     //Roteamento
-    const roteamento = useRouter(); 
+    const roteamento = useRouter();
 
     const imageError = 'https://images.vexels.com/media/users/3/147102/isolated/lists/082213cb0f9eabb7e6715f59ef7d322a-icone-de-perfil-do-instagram.png'
 
@@ -73,57 +61,44 @@ export default function PaginaInicial() {
                         backgroundColor: appConfig.theme.colors.neutrals[500],
                     }}
                 >
-                    {/* Formulário */}
                     <Box
                         as="form"
                         onSubmit={function (event) {
                             event.preventDefault();
-                            console.log('Alguém submeteu o form');
-                            roteamento.push(`/chat?username=${username}`);
-                            //window.location.href = '/chat';
+                            if (username.trim() != '') {
+                                roteamento.push(`/chat?username=${username}`);
+                            }
                         }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
                         }}
                     >
-                        <Titulo tag="h2">Bem-vindo!</Titulo>
+                        <Titulo tag="h2">Bem-vindo (a)!</Titulo>
                         <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
                             {appConfig.name}
                         </Text>
 
-                        {/*<input
-                            type= "text"
-                            value= {username}
-                            onChange= {function (event){
-                                console.log('usuario digitou', event.target.value);
-                                //Onde ta o valor?
-                                const valor = event.target.value;                               
-                                //trocar o valor da variavel
-                                //atraves do React e avise quem precisa
-                                setUsername(valor);
-                            }}
-                        />*/}
-
-                      
                         <TextField
                             value={username}
-                            onChange={function (event){
-                                console.log('usuario digitou', event.target.value);
-                                //Onde ta o valor?
-                                const valor = event.target.value;                               
-                                //trocar o valor da variavel
-                                //atraves do React e avise quem precisa
+                            placeholder="Entre com o seu usuário do GitHub"
+                            onChange={function (event) {
+                                const valor = event.target.value;
                                 setUsername(valor);
                             }}
                             fullWidth
-                            textFieldColors={{
-                                neutral: {
-                                    textColor: appConfig.theme.colors.neutrals[200],
-                                    mainColor: appConfig.theme.colors.neutrals[900],
-                                    mainColorHighlight: appConfig.theme.colors.primary[500],
-                                    backgroundColor: appConfig.theme.colors.neutrals[800],
-                                },
+                            textFieldColors={
+                                {
+                                    neutral: {
+                                        textColor: appConfig.theme.colors.neutrals[200],
+                                        mainColor: appConfig.theme.colors.neutrals[900],
+                                        mainColorHighlight: appConfig.theme.colors.primary[500],
+                                        backgroundColor: appConfig.theme.colors.neutrals[800],
+                                    },
+                                }
+                            }
+                            styleSheet={{
+                                
                             }}
                         />
                         <Button
@@ -138,10 +113,7 @@ export default function PaginaInicial() {
                             }}
                         />
                     </Box>
-                    {/* Formulário */}
 
-
-                    {/* Photo Area */}
                     <Box
                         styleSheet={{
                             display: 'flex',

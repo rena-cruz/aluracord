@@ -13,14 +13,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "react-dotenv && next build",
-    "start": "react-dotenv && next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint"
-  },
-  "react-dotenv": {
-    "whitelist": [
-      "SUPABASE_ANON_KEY",
-      "SUPABASE_URL"
-    ]
   }
 }

@@ -29,19 +29,11 @@ export default function ChatPage() {
             .select('*')
             .order('id', { ascending: false })
             .then(({ data }) => {
-                //console.log('Dados da consulta:', data);
                 setMessageList(data);
             });
         const subscription = escutaMensagensEmTempoReal((newMessage) => {
             console.log('Nova mensagem:', newMessage);
             console.log('messageList:', messageList);
-            // Quero reusar um valor de referencia (objeto/array) 
-            // Passar uma função pro setState
-
-            // setListaDeMensagens([
-            //     novaMensagem,
-            //     ...listaDeMensagens
-            // ])
             setMessageList((valorAtualDaLista) => {
                 console.log('valorAtualDaLista:', valorAtualDaLista);
                 return [
@@ -56,10 +48,8 @@ export default function ChatPage() {
         }
     }, []);
 
-
     function handleNewMessage(newMessage) {
         const message = {
-            //id: messageList.length + (Math.random() * 100),
             de: usuarioLogado,
             texto: newMessage,
         };
@@ -78,8 +68,15 @@ export default function ChatPage() {
         const messageListFiltered = messageList.filter((messageFiltered) => {
             return messageFiltered.id != messageId
         })
-
         setMessageList(messageListFiltered)
+
+        supabaseClient
+            .from('message')
+            .delete()
+            .match({ id: messageId })
+            .then(({ data }) => {
+                console.log('Apagando mensagem: ', data);
+            });
     }
 
     return (
@@ -119,24 +116,14 @@ export default function ChatPage() {
                         padding: '16px',
                     }}
                 >
-                    
-                    <MessageList mensagens={messageList} />
-                    {/*<MessageList messageList={messageList} handleDeleteMessage={handleDeleteMessage} />*/}
-                    {/* Lista de mensagens:
-                    <ul>
-                        {messageList.map((messageItem) => {
-                            return (
-                                <li key={messageItem.id}>
-                                    {messageItem.user}: {messageItem.text}
-                                </li>
-                            )
-                        })}
-                    </ul> */}
+
+                    <MessageList mensagens={messageList} handleDelete={handleDeleteMessage} />
+
                     <Box
                         as="form"
                         styleSheet={{
                             display: 'flex',
-                            alignItems: 'center',
+                            alignItems: 'center'
                         }}
                     >
                         <TextField
@@ -164,19 +151,24 @@ export default function ChatPage() {
                             }}
 
                         />
-                        {/* CallBack = chamada de retorno*/}
                         <ButtonSendSticker
                             onStickerClick={(sticker) => {
-                                // console.log('[USANDO O COMPONENTE] Salva esse sticker no banco', sticker);
-                                handleNovaMensagem(':sticker: ' + sticker);
+                                handleNewMessage(':sticker: ' + sticker);
                             }}
                         />
                         <Button
                             onClick={() => handleNewMessage(message)}
-                            label='Enviar'
-                            fullWidth
+                            label='▶'
                             styleSheet={{
-                                maxWidth: '150px',
+                                borderRadius: '50%',
+                                minWidth: '40px',
+                                minHeight: '40px',
+                                fontSize: '20px',
+                                marginBottom: '8px',
+                                lineHeight: '0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
 
                             }}
                             buttonColors={{
@@ -213,8 +205,6 @@ function Header() {
 
 function MessageList(props) {
 
-    //const handleDeleteMessage = props.handleDeleteMessage
-
     return (
         <Box
             tag="ul"
@@ -249,29 +239,35 @@ function MessageList(props) {
                         >
                             <Image
                                 styleSheet={{
-                                    width: '20px',
-                                    height: '20px',
+                                    width: '40px',
+                                    height: '40px',
                                     borderRadius: '50%',
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
                                 src={`https://github.com/${messageItem.de}.png`}
                             />
-                            <Text tag="strong">
-                                {messageItem.de}
-                            </Text>
-                            <Text
+                            <Box
                                 styleSheet={{
-                                    fontSize: '10px',
-                                    marginLeft: '8px',
-                                    color: appConfig.theme.colors.neutrals[200],
+                                    display: 'inline-block'
                                 }}
-                                tag="span"
                             >
-                                {(new Date().toLocaleDateString())}
-                            </Text>
-                            {/*<Text
-                                onClick={handleDeleteMessage}
+                                <Text tag="strong">
+                                    {messageItem.de}
+                                </Text>
+                                <Text
+                                    styleSheet={{
+                                        fontSize: '10px',
+                                        //marginLeft: '8px',
+                                        color: appConfig.theme.colors.neutrals[200],
+                                    }}
+                                    tag="span"
+                                >
+                                    {(new Date().toLocaleDateString())}
+                                </Text>
+                            </Box>
+                            <Text
+                                onClick={props.handleDelete}
                                 styleSheet={{
                                     fontSize: '10px',
                                     fontWeight: 'bold',
@@ -289,23 +285,18 @@ function MessageList(props) {
                                 data-id={messageItem.id}
                             >
                                 X
-                            </Text>*/}
+                            </Text>
                         </Box>
-                        {/*Declarativo */}
-                        {/*Condicional: {messageItem.texto.startsWith(':sticker:').toString}*/}
                         {messageItem.texto.startsWith(':sticker:')
                             ? (
-                                <Image src={messageItem.texto.replace(':sticker:', '')} />
+                                <Image
+                                    src={messageItem.texto.replace(':sticker:', '')}
+                                    styleSheet={{ height: '150px' }} 
+                                />
                             )
                             : (
                                 messageItem.texto
                             )}
-
-                        {/*if mensagem de texto possui stickers:
-                            mostra a imagem
-                        else
-                        messageItem.texto 
-                        {messageItem.texto}*/}
                     </Text>
                 );
             })}

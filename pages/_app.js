@@ -10,6 +10,10 @@ function GlobalStyle() {
         body {
           font-family: 'Open Sans', sans-serif;
         }
+        input::placeholder {
+          color: lightgrey;
+          font-style: italic;
+        }
         /* App fit Height */ 
         html, body, #__next {
           min-height: 100vh;

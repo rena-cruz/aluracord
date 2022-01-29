@@ -8,27 +8,29 @@ export function ButtonSendSticker(props) {
   return (
     <Box
       styleSheet={{
-        position: 'relative',
+        position: 'relative'
       }}
     >
       <Button
         styleSheet={{
           borderRadius: '50%',
-          padding: '0 3px 0 0',
-          minWidth: '50px',
-          minHeight: '50px',
+          padding: '0 0 0 0',
+          minWidth: '40px',
+          minHeight: '40px',
           fontSize: '20px',
           marginBottom: '8px',
           lineHeight: '0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.neutrals[300],
-          filter: isOpen ? 'grayscale(0)' : 'grayscale(1)',
-          hover: {
-            filter: 'grayscale(0)',
-          }
+          marginRight: '10px'
         }}
+        buttonColors={{
+          contrastColor: appConfig.theme.colors.neutrals["000"],
+          mainColor: appConfig.theme.colors.primary[500],
+          mainColorLight: appConfig.theme.colors.primary[400],
+          mainColorStrong: appConfig.theme.colors.primary[600],
+      }}
         label="😋"
         onClick={() => setOpenState(!isOpen)}
       />
@@ -74,7 +76,6 @@ export function ButtonSendSticker(props) {
             {appConfig.stickers.map((sticker) => (
               <Text
                 onClick={() => {
-                  // console.log('[DENTRO DO COMPONENTE] Clicou no sticker:', sticker);
                   if (Boolean(props.onStickerClick)) {
                     props.onStickerClick(sticker);
                   }
@@ -96,8 +97,7 @@ export function ButtonSendSticker(props) {
               </Text>
             ))}
           </Box>
-        </Box>
-      )}
+        </Box>)}
     </Box>
   )
 }
