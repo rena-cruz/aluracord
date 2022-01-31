@@ -3,9 +3,19 @@ import React, { useState } from 'react';
 import myColors from './../src/helpers/colors.json';
 import { useRouter } from 'next/router';
 import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
-import { MyService } from '../src/service/MyService';
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseClient = MyService.createClientDataBase();
+
+const  supabaseClient  =  createClient ( process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY )
+
+function listenMessageRealTime(addMessage) {
+    return supabaseClient
+        .from('message')
+        .on('INSERT', (respostaLive) => {
+            addMessage(respostaLive.new);
+        })
+        .subscribe();
+}
 
 export default function ChatPage() {
     const roteamento = useRouter();
@@ -21,9 +31,8 @@ export default function ChatPage() {
             .then(({ data }) => {
                 setMessageList(data);
             });
-        const subscription = MyService.listenMessageRealTime(supabaseClient, (newMessage) => {
+        const subscription = listenMessageRealTime((newMessage) => {
             setMessageList((valorAtualDaLista) => {
-                console.log('valorAtualDaLista:', valorAtualDaLista);
                 return [
                     newMessage,
                     ...valorAtualDaLista,
