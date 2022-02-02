@@ -2,7 +2,7 @@
  <h1>Imersão React</h1>
 </div>
 
-## Chat: Projeto Aluracord criado com a @alura @omariosouto @peas
+## Chat: Projeto Aluracord criado com o @omariosouto @peas e @alura
 
 <h2> Tela de Login: </h2>
 <p align="center"></p>
@@ -20,7 +20,6 @@
 ![telaStickers](https://user-images.githubusercontent.com/38020527/152166664-adcf6f07-b25e-42cf-bca7-647f9cfd8282.PNG)
 
 <br>
-
 ## Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
@@ -30,5 +29,4 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [HTML5](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
 - [CSS3](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
 - [Supabase](https://supabase.com)
-
 <br>
